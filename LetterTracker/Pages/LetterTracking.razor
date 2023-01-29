@@ -1,0 +1,265 @@
+﻿@page "/lettertracking"
+@using LetterTracker.Models
+
+<h3>Letter Tracking</h3>
+
+<EditForm Model="@SearchModel" OnValidSubmit="@HandleValidSubmit" id="searchForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="row mb-4">
+        <div class="col-3">
+            <label for="eocId" class="form-label fw-bold">
+                EOC ID
+            </label>
+            <InputText @bind-Value="SearchModel.EocId" class="form-control" aria-label="EOC ID" id="eocId"/>
+        </div>
+        <div class="col-3">
+            <label for="memberId" class="form-label fw-bold">
+                Member ID
+            </label>
+            <InputText @bind-Value="SearchModel.MemberId" class="form-control" aria-label="Member ID" id="memberId"/>
+        </div>
+        <div class="col-3">
+            <label for="agentUserId" class="form-label fw-bold">
+                Agent User ID
+            </label>
+            <InputText @bind-Value="SearchModel.AgentUserId" class="form-control" aria-label="Agent User ID" id="agentUserId" />
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-3">
+            <label for="reasonForManualLetter" class="form-label fw-bold">
+                Reason for Manual Letter
+            </label>
+            <InputSelect @bind-Value="SearchModel.ReasonForManualLetter" class="form-select" aria-label="Reason for Manual Letter">
+                <option value="@ManualLetterReasonEnum.VerbalNotificationUnsuccessful">Verbal Notification Unsuccessful</option>
+                <option value="@ManualLetterReasonEnum.Holiday">Holiday</option>
+                <option value="@ManualLetterReasonEnum.SystemLetterError">System Letter Error</option>
+                <option value="@ManualLetterReasonEnum.DmrTatAtRisk">DMR TAT At Risk</option>
+            </InputSelect>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-3">
+            <label for="manualMailDate" class="form-label fw-bold">
+                Manual Mail Date
+            </label>
+            <InputDate @bind-Value="SearchModel.ManualMailDate" class="form-control date" id="manualMaildate" />
+        </div>
+        <div class="col-3">
+            <label for="manualMailTime" class="form-label fw-bold">
+                Manual Mail Time
+            </label>
+            <InputDate Type="InputDateType.Time" @bind-Value="SearchModel.ManualMailTime" class="form-control" id="manualMailTime" />
+        </div>
+        <div class="col-3">
+            <label for="manualMailTimeZone" class="form-label fw-bold">
+                Time Zone
+            </label>
+            <InputSelect @bind-Value="SearchModel.TimeZone" class="form-select" aria-label="Manual Mail Time Zone">
+                <option value="@TimeZoneEnum.Est">EST</option>
+                <option value="@TimeZoneEnum.Cst">CST</option>
+                <option value="@TimeZoneEnum.Mst">MST</option>
+                <option value="@TimeZoneEnum.Pst">PST</option>
+                <option value="@TimeZoneEnum.Akst">AKST</option>
+            </InputSelect>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col">
+            <div class="form-label fw-bold">
+                Letter Type
+            </div>
+            <InputRadioGroup @bind-Value="SearchModel.LetterType">
+                <div class="form-check">
+                    <InputRadio Value="@LetterTypeEnum.PreDecision" class="form-check-input" id="letterTypePredecision" />
+                    <label for="letterTypePredecision" class="form-check-label">
+                        Pre-Decision
+                    </label>
+                </div>
+                <div class="form-check">
+                    <InputRadio Value="@LetterTypeEnum.FinalNotification" class="form-check-input" id="letterTypeFinalNotification" />
+                    <label for="letterTypeFinalNotification" class="form-check-label">
+                        Final Notification
+                    </label>
+                </div>
+            </InputRadioGroup>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="form-label fw-bold">
+            Manual Process Used (by day of week)
+        </div>
+        <InputRadioGroup Name="processDay"
+                         TValue="ManualProcessDayEnum"
+                         Value="SearchModel.ManualProcessDay"
+                         ValueExpression="@(() => SearchModel.ManualProcessDay)"
+                         ValueChanged="@((ManualProcessDayEnum day) => HandleProccessDayChanged(day))" >
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <InputRadio Value="@ManualProcessDayEnum.BusinessDay" Name="processDay" class="form-check-input" id="businessDay" />
+                    <label class="form-check-label" for="businessDay">
+                        Business Day
+                    </label>
+                </div>
+                <div class="ps-3">
+                    <InputRadioGroup @bind-Value="SearchModel.BusinessDayManualProcessUsed" Name="businessDayProcess">
+                        <div class="form-check">
+                            <InputRadio Value="@ManualProcessEnum.CageInMailRoom" Name="businessDayProcess" class="form-check-input" id="businessDayCage"
+                                        disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.BusinessDay)" />
+                            <label class="form-check-label" for="businessDayCage">
+                                Cage in Mail Room
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <InputRadio Value="@ManualProcessEnum.SecurityDesk" Name="businessDayProcess" class="form-check-input" id="businessDaySecurity"
+                                        disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.BusinessDay)" />
+                            <label class="form-check-label" for="businessDaySecurity">
+                                Security Desk
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <InputRadio Value="@ManualProcessEnum.PostOfficeUspsCollectionBox" class="form-check-input" id="businessDayPostOffice"
+                                        disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.BusinessDay)" />
+                            <label class="form-check-label" for="businessDayPostOffice">
+                                Post Office/USPS Collection Box
+                            </label>
+                        </div>
+                    </InputRadioGroup>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <InputRadio Value="@ManualProcessDayEnum.Saturday" Name="processDay" class="form-check-input" id="saturday"/>
+                    <label class="form-check-label" for="saturday">
+                        Saturday
+                    </label>
+                </div>
+                <div class="ps-3">
+                    <InputRadioGroup @bind-Value="SearchModel.SaturdayManualProcessUsed" Name="saturdayProcess">
+                        <div class="form-check">
+                            <InputRadio Value="@ManualProcessEnum.SecurityDesk" Name="saturdayProcess" class="form-check-input" id="saturdaySecurity"
+                                        disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Saturday)"
+                                        checked="@(SearchModel.ManualProcessDay == ManualProcessDayEnum.Saturday)"/>
+                            <label class="form-check-label" for="inlineRadio1">
+                                Security Desk
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <InputRadio Value="@ManualProcessEnum.PostOfficeUspsCollectionBox" Name="saturdayProcess" class="form-check-input" id="saturdayPostOffice"
+                                        disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Saturday)" />
+                            <label class="form-check-label" for="saturdayPostOffice">
+                                Post Office/USPS Collection Box
+                            </label>
+                        </div>
+                    </InputRadioGroup>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <InputRadio Value="@ManualProcessDayEnum.Sunday" Name="processDay" class="form-check-input" id="sunday" />
+                    <label class="form-check-label" for="inlineRadio3">
+                        Sunday
+                    </label>
+                </div>
+                <div class="ps-3">
+                    <InputRadioGroup @bind-Value="SearchModel.SundayManualProcessUsed" Name="sundayProcess">
+                        <div class="form-check">
+                            <InputRadio Value="@ManualProcessEnum.PostOfficeUspsCollectionBox" Name="sundayProcess" class="form-check-input" id="sundayPostOffice"
+                                        disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Sunday)"
+                                        checked="@(SearchModel.ManualProcessDay == ManualProcessDayEnum.Sunday)"/>
+                            <label class="form-check-label" for="sundayPostOffice">
+                                Post Office/USPS Collection Box
+                            </label>
+                        </div>
+                    </InputRadioGroup>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-check form-check-inline">
+                    <InputRadio Value="@ManualProcessDayEnum.Holiday" Name="processDay" class="form-check-input" id="holiday" />
+                    <label class="form-check-label" for="holiday">
+                        Holiday
+                    </label>
+                </div>
+                <div class="ps-3">
+                    <InputRadioGroup @bind-Value="SearchModel.HolidayManualProcessUsed" Name="holidayProcess">
+                        <div class="form-check">
+                            <InputRadio Value="@ManualProcessEnum.PostOfficeUspsCollectionBox" Name="holidayProcess" class="form-check-input" id="holidayPostOffice"
+                                        disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Holiday)"
+                                        checked="@(SearchModel.ManualProcessDay == ManualProcessDayEnum.Holiday)" />
+                            <label class="form-check-label" for="holidayPostOffice">
+                                Post Office/USPS Collection Box
+                            </label>
+                        </div>
+                    </InputRadioGroup>
+                </div>
+            </div>
+        </InputRadioGroup>
+    </div>
+
+    <div class="row mb-4">
+        <label for="comments" class="form-label fw-bold">
+            Comments
+        </label>
+        <InputTextArea @bind-Value="SearchModel.Comments" class="form-control" id="comments" rows="3" />
+    </div>
+
+    <button class="btn btn-primary">
+        Submit
+    </button>
+    <a class="btn btn-outline-danger" @onclick="HandleClearClicked">
+        Clear
+    </a> 
+</EditForm>
+
+
+@code {
+    private LetterTrackingSearchModel SearchModel = new LetterTrackingSearchModel();
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine(SearchModel);
+    }
+
+    private void HandleClearClicked()
+    {
+        SearchModel = new LetterTrackingSearchModel();
+    }
+
+    private void HandleProccessDayChanged(ManualProcessDayEnum day)
+    {
+        // Cache current selection
+        if (SearchModel.ManualProcessDay == ManualProcessDayEnum.BusinessDay)
+            SearchModel.BusinessDayManualProcessCached = SearchModel.BusinessDayManualProcessUsed;
+        else if (SearchModel.ManualProcessDay == ManualProcessDayEnum.Saturday)
+            SearchModel.SaturdayManualProcessCached = SearchModel.SaturdayManualProcessUsed;
+        else if (SearchModel.ManualProcessDay == ManualProcessDayEnum.Sunday)
+            SearchModel.SundayManualProcessCached = SearchModel.SundayManualProcessUsed;
+        else
+            SearchModel.HolidayManualProcessCached = SearchModel.HolidayManualProcessUsed;
+
+        SearchModel.ManualProcessDay = day;
+
+        // Clear all selected values
+        SearchModel.BusinessDayManualProcessUsed = null;
+        SearchModel.SaturdayManualProcessUsed = null;
+        SearchModel.SundayManualProcessUsed = null;
+        SearchModel.HolidayManualProcessUsed = null;
+
+        // Retrieve cached value for newly selected day
+        if (day == ManualProcessDayEnum.BusinessDay)
+            SearchModel.BusinessDayManualProcessUsed = SearchModel.BusinessDayManualProcessCached;
+        else if (day == ManualProcessDayEnum.Saturday)
+            SearchModel.SaturdayManualProcessUsed = SearchModel.SaturdayManualProcessCached;
+        else if (day == ManualProcessDayEnum.Sunday)
+            SearchModel.SundayManualProcessUsed = SearchModel.SundayManualProcessCached;
+        else
+            SearchModel.HolidayManualProcessUsed = SearchModel.HolidayManualProcessCached;
+    }
+}
+
+
