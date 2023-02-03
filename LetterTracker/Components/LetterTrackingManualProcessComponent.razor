@@ -1,0 +1,182 @@
+﻿
+<MudText Typo="Typo.subtitle1">Manual Process Used (by day of week)</MudText>
+<MudRadioGroup T="ManualProcessDayEnum"
+               Name="processDay"
+               SelectedOption="SearchModel.ManualProcessDay"
+               SelectedOptionChanged="HandleProccessDayChanged"
+               Class="ps-4">
+    <MudGrid>
+        <MudItem xs="3">
+            <MudRadio Option="ManualProcessDayEnum.BusinessDay" Color="Color.Primary" Dense="true">
+                Business Day
+            </MudRadio>
+            <MudRadioGroup T="string"
+                           Name="businessDayProcess"
+                           @bind-SelectedOption="SearchModel.BusinessDayManualProcessRadioOption"
+                           Class="ps-4">
+                <MudGrid>
+                    <MudItem xs="12" Class="mb-n6">
+                        <MudRadio Disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.BusinessDay)"
+                                  Option="ManualProcessEnum.CageInMailRoom.ToString()"
+                                  Color="Color.Secondary"
+                                  Dense="true">
+                            Cage in Mail Room
+                        </MudRadio>
+                    </MudItem>
+                    <MudItem xs="12" Class="mb-n6">
+                        <MudRadio Disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.BusinessDay)"
+                                  Option="ManualProcessEnum.SecurityDesk.ToString()"
+                                  Color="Color.Secondary"
+                                  Dense="true">
+                            Security Desk
+                        </MudRadio>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudRadio Disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.BusinessDay)"
+                                  Option="ManualProcessEnum.PostOfficeUspsCollectionBox.ToString()"
+                                  Color="Color.Secondary"
+                                  Dense="true">
+                            Post Office/USPS Collection Box
+                        </MudRadio>
+                    </MudItem>
+                </MudGrid>
+            </MudRadioGroup>
+        </MudItem>
+
+        <MudItem xs="3">
+            <MudRadio Option="ManualProcessDayEnum.Saturday"
+                      Color="Color.Primary"
+                      Dense="true">
+                Saturday
+            </MudRadio>
+            <MudRadioGroup T="string"
+                           Name="saturdayProcess"
+                           @bind-SelectedOption="SearchModel.SaturdayManualProcessRadioOption"
+                           Class="ps-4">
+                <MudGrid>
+                    <MudItem xs="12" Class="mb-n6">
+                        <MudRadio Disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Saturday)"
+                                  Option="ManualProcessEnum.SecurityDesk.ToString()"
+                                  Color="Color.Secondary"
+                                  Dense="true">
+                            Security Desk
+                        </MudRadio>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudRadio Disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Saturday)"
+                                  Option="ManualProcessEnum.PostOfficeUspsCollectionBox.ToString()"
+                                  Color="Color.Secondary"
+                                  Dense="true">
+                            Post Office/USPS Collection Box
+                        </MudRadio>
+                    </MudItem>
+                </MudGrid>
+            </MudRadioGroup>
+        </MudItem>
+
+        <MudItem xs="3">
+            <MudRadio Option="ManualProcessDayEnum.Sunday"
+                      Color="Color.Primary"
+                      Dense="true">
+                Sunday
+            </MudRadio>
+            <MudRadioGroup T="string"
+                           @bind-SelectedOption="SearchModel.SundayManualProcessRadioOption"
+                           Name="sundayProcess"
+                           Class="ps-4">
+                <MudRadio Disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Sunday)"
+                          Option="ManualProcessEnum.PostOfficeUspsCollectionBox.ToString()"
+                          Color="Color.Secondary"
+                          Dense="true">
+                    Post Office/USPS Collection Box
+                </MudRadio>
+            </MudRadioGroup>
+        </MudItem>
+
+        <MudItem xs="3">
+            <MudRadio Option="ManualProcessDayEnum.Holiday"
+                      Color="Color.Primary"
+                      Dense="true">
+                Holiday
+            </MudRadio>
+            <MudRadioGroup T="string"
+                           @bind-Value="SearchModel.HolidayManualProcessRadioOption"
+                           Name="holidayProcess"
+                           Class="ps-4">
+                <MudRadio Disabled="@(SearchModel.ManualProcessDay != ManualProcessDayEnum.Holiday)"
+                          Option="ManualProcessEnum.PostOfficeUspsCollectionBox.ToString()"
+                          Color="Color.Secondary"
+                          Dense="true">
+                    Post Office/USPS Collection Box
+                </MudRadio>
+            </MudRadioGroup>
+        </MudItem>
+    </MudGrid>
+</MudRadioGroup>
+
+@code {
+    [Parameter]
+    public LetterTrackingSearchModel SearchModel { get; set; } = null!;
+
+    private void HandleProccessDayChanged(ManualProcessDayEnum day)
+    {
+        // Cache and save current selection
+        CacheCurrentManualProcess();
+        SearchModel.ManualProcessDay = day;
+
+        // Clear all selected values
+        ClearManualProcessRadios();
+
+        // Retrieve cached value for newly selected day
+        SetSelectedDayRadioOption(day);
+    }
+
+    private void CacheCurrentManualProcess()
+    {
+        if (SearchModel.ManualProcessDay == ManualProcessDayEnum.BusinessDay)
+        {
+            SearchModel.BusinessDayManualProcessUsed = Enum.TryParse(SearchModel.BusinessDayManualProcessRadioOption, out ManualProcessEnum manualProcess)
+                ? manualProcess
+                : null;
+        }
+        else if (SearchModel.ManualProcessDay == ManualProcessDayEnum.Saturday)
+        {
+            SearchModel.SaturdayManualProcessUsed = Enum.TryParse(SearchModel.SaturdayManualProcessRadioOption, out ManualProcessEnum manualProcess)
+                ? manualProcess
+                : null;
+        }
+        else if (SearchModel.ManualProcessDay == ManualProcessDayEnum.Sunday)
+        {
+            SearchModel.SundayManualProcessUsed = Enum.TryParse(SearchModel.SundayManualProcessRadioOption, out ManualProcessEnum manualProcess)
+                ? manualProcess
+                : null;
+        }
+        else
+        {
+            SearchModel.HolidayManualProcessUsed = Enum.TryParse(SearchModel.HolidayManualProcessRadioOption, out ManualProcessEnum manualProcess)
+                ? manualProcess
+                : null;
+        }
+    }
+
+    private void ClearManualProcessRadios()
+    {
+        SearchModel.BusinessDayManualProcessRadioOption = null;
+        SearchModel.SaturdayManualProcessRadioOption = null;
+        SearchModel.SundayManualProcessRadioOption = null;
+        SearchModel.HolidayManualProcessRadioOption = null;
+    }
+
+    private void SetSelectedDayRadioOption(ManualProcessDayEnum day)
+    {
+        if (day == ManualProcessDayEnum.BusinessDay)
+            SearchModel.BusinessDayManualProcessRadioOption = SearchModel.BusinessDayManualProcessUsed.ToString();
+        else if (day == ManualProcessDayEnum.Saturday)
+            SearchModel.SaturdayManualProcessRadioOption = SearchModel.SaturdayManualProcessUsed.ToString();
+        else if (day == ManualProcessDayEnum.Sunday)
+            SearchModel.SundayManualProcessRadioOption = SearchModel.SundayManualProcessUsed.ToString();
+        else
+            SearchModel.HolidayManualProcessRadioOption = SearchModel.HolidayManualProcessUsed.ToString();
+    }
+}
+

@@ -10,10 +10,12 @@
     <None Remove="Models\" />
     <None Remove="CustomValidation\" />
     <None Remove="MudBlazor" />
+    <None Remove="Components\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="CustomValidation\" />
+    <Folder Include="Components\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="6.1.8" />
