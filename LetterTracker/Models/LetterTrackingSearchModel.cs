@@ -11,14 +11,22 @@ namespace LetterTracker.Models
         public string? EocId { get; set; }
         //[Required]
         public string? MemberId { get; set; }
+        //[Required]
         public string? AgentUserId { get; set; }
+        //[Required]
         public ManualLetterReasonEnum ReasonForManualLetter { get; set; }
+        //[Required]
         public DateTime? ManualMailDate { get; set; }
+        //[Required]
         public TimeSpan? ManualMailTime { get; set; }
+        //[Required]
         public TimeZoneEnum TimeZone { get; set; }
+        //[Required]
         public LetterTypeEnum LetterType { get; set; }
-        public ManualProcessDayEnum ManualProcessDay { get; set; }
+        public string? Comments { get; set; }
         [Required]
+        public ManualProcessDayEnum ManualProcessDay { get; set; }
+        [ManualProcessAttribute]
         public ManualProcessEnum? ManualProcessUsed
         {
             get
@@ -59,7 +67,6 @@ namespace LetterTracker.Models
         public string? SundayManualProcessRadioOption { get; set; }
         public ManualProcessEnum? HolidayManualProcessUsed { get; set; }
         public string? HolidayManualProcessRadioOption { get; set; }
-        public string? Comments { get; set; }
     }
 }
 
