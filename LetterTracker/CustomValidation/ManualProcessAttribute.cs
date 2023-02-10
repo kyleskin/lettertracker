@@ -16,10 +16,10 @@ namespace LetterTracker.CustomValidation
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value is null)
+            if (value is null || (ManualProcessEnum)value == ManualProcessEnum.None)
                 return new ValidationResult("A manual process is required");
 
-            var searchModel = validationContext.ObjectInstance as LetterTrackingSearchModel;
+            var searchModel = validationContext.ObjectInstance as PaManualMailTrackingSearchModel;
             if (searchModel!.ManualProcessDay == ManualProcessDayEnum.BusinessDay)
                 if (BusinessDayAllowedProcesses.HasFlag((ManualProcessEnum)value))
                     return ValidationResult.Success;

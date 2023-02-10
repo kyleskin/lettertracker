@@ -1,5 +1,7 @@
-﻿@page "/lettertracking"
+﻿@page "/PaManualMailTracking"
+@using LetterTracker.Components.PaHubManualMailTrackingComponents
 
+<PageTitle>PaManualMailTracking</PageTitle>
 <MudText Typo="Typo.h5" Class="mb-3 mt-5">Letter Tracking</MudText>
 <EditForm Model="@SearchModel" OnValidSubmit="@HandleValidSubmit" id="searchForm">
     <DataAnnotationsValidator />
@@ -47,7 +49,7 @@
         </MudItem>
         <MudItem xs="7"></MudItem>
         <MudItem xs="12">
-            <LetterTrackingManualProcessComponent SearchModel="SearchModel"></LetterTrackingManualProcessComponent>
+            <ManualProcessComponent SearchModel="SearchModel"></ManualProcessComponent>
         </MudItem>
         <MudItem xs="12">
             <MudTextField T="string" Label="Comments" Variant="Variant.Outlined" Lines="5" />
@@ -65,7 +67,7 @@
 
 
 @code {
-    private LetterTrackingSearchModel SearchModel = new LetterTrackingSearchModel
+    private PaManualMailTrackingSearchModel SearchModel = new PaManualMailTrackingSearchModel
     {
         ReasonForManualLetter = ManualLetterReasonEnum.VerbalNotificationUnsuccessful,
         TimeZone = TimeZoneEnum.Mst,
@@ -76,16 +78,14 @@
 
     private void HandleValidSubmit()
     {
-        
+
         Console.WriteLine(SearchModel);
     }
 
     private void HandleClearClicked()
     {
-        SearchModel = new LetterTrackingSearchModel();
+        SearchModel = new PaManualMailTrackingSearchModel();
     }
-
-    
 }
 
 

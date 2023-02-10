@@ -4,7 +4,7 @@ using LetterTracker.CustomValidation;
 
 namespace LetterTracker.Models
 {
-    public class LetterTrackingSearchModel
+    public class PaManualMailTrackingSearchModel
     {
         //[Required]
         //[StringLength(10, MinimumLength=10, ErrorMessage = "{0} must be {1} characters long.")]
@@ -26,12 +26,12 @@ namespace LetterTracker.Models
         public string? Comments { get; set; }
         [Required]
         public ManualProcessDayEnum ManualProcessDay { get; set; }
+        private ManualProcessEnum? _manualProcess;
         [ManualProcessAttribute]
         public ManualProcessEnum? ManualProcessUsed
         {
             get
             {
-                ManualProcessEnum? _manualProcess;
                 if (ManualProcessDay == ManualProcessDayEnum.BusinessDay)
                 {
                     _manualProcess = Enum.TryParse(BusinessDayManualProcessRadioOption, out ManualProcessEnum manualProcess)
@@ -58,6 +58,11 @@ namespace LetterTracker.Models
                 }
                 return _manualProcess;
             }
+            set
+            {
+                _manualProcess = value;
+            }
+            
         }
         public ManualProcessEnum? BusinessDayManualProcessUsed { get; set; }
         public string? BusinessDayManualProcessRadioOption { get; set; }
