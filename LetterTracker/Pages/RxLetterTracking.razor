@@ -1,0 +1,81 @@
+﻿@page "/rxlettertracking"
+@using LetterTracker.Models.RxLetterTracking
+
+<PageTitle>Pharmacy Letter Tracking</PageTitle>
+<MudText Typo="Typo.h5" Class="mb-3 mt-5">Pharmacy Letter Tracking</MudText>
+<EditForm Model="@SearchModel" OnValidSubmit="HandleValidSubmit" id="searchForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <MudGrid>
+        <MudItem xs="12" Class="mb-n5">
+            <MudText Typo="Typo.subtitle1">Date Range</MudText>
+        </MudItem>
+        <MudItem xs="4">
+            <MudDatePicker Label="Start Date" Editable="true" @bind-Value="SearchModel.StartDate"></MudDatePicker>
+        </MudItem>
+        <MudItem xs="4">
+            <MudDatePicker Label="End Date" Editable="true" @bind-Value="SearchModel.EndDate"></MudDatePicker>
+        </MudItem>
+        <MudItem xs="12" Class="mb-n5">
+            <MudText Typo="Typo.subtitle1">Search ID</MudText>
+        </MudItem>
+        <MudItem xs="4">
+            <MudSelect T="@IdType" Label="ID Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="SearchModel.IdType">
+                <MudSelectItem Value="@IdType.Subscriber">Subscriber ID</MudSelectItem>
+                <MudSelectItem Value="@IdType.Npi">NPI</MudSelectItem>
+                <MudSelectItem Value="@IdType.Nabp">NABP</MudSelectItem>
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="4">
+            <MudTextField Placeholder="Search ID" @bind-Value="SearchModel.Id"></MudTextField>
+        </MudItem>
+        <MudItem xs="4"></MudItem>
+        <MudItem xs="12" Class="mb-n5">
+            <MudText Typo="Typo.subtitle1">Search by:</MudText>
+        </MudItem>
+        <MudItem Visible="" xs="3">
+            <MudRadioGroup @bind-SelectedOption="SearchModel.SearchType">
+                <MudRadio Option="@SearchType.Facility" Dense="true" Color="Color.Primary">Facility</MudRadio>
+                <MudRadio Option="@SearchType.Name" Dense="true" Color="Color.Primary">Name</MudRadio>
+            </MudRadioGroup>
+        </MudItem>
+        <MudItem xs="9"></MudItem>
+        @if (SearchModel.SearchType == SearchType.Facility)
+        {
+            <MudItem xs="8">
+                <MudTextField Label="Facility Name" @bind-Value="SearchModel.FacilityName"></MudTextField>
+            </MudItem>
+            <MudItem xs="4"></MudItem>
+        }
+        @if (SearchModel.SearchType == SearchType.Name)
+        {
+            <MudItem xs="4">
+                <MudTextField Label="First Name" @bind-Value="SearchModel.FirstName"></MudTextField>
+            </MudItem>
+            <MudItem xs="4">
+                <MudTextField Label="Last Name" @bind-Value="SearchModel.LastName"></MudTextField>
+            </MudItem>
+        }
+        <MudItem xs="8">
+            <MudTextField Label="Drug Name" @bind-Value="SearchModel.DrugName"></MudTextField>
+        </MudItem>
+        <MudItem xs="8">
+            <MudTextField Label="Document Control Number" @bind-Value="SearchModel.DocumentControlNum" Clearable />
+        </MudItem>
+
+    </MudGrid>
+</EditForm>
+
+@code {
+    private RxLetterTrackingSearchModel SearchModel = new RxLetterTrackingSearchModel
+    {
+        IdType = IdType.Subscriber,
+        SearchType = SearchType.Facility
+    };
+
+    private void HandleValidSubmit()
+    {
+
+    }
+}
+

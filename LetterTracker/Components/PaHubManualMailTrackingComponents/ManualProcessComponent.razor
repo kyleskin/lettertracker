@@ -1,4 +1,6 @@
-﻿<MudText Typo="Typo.subtitle1">Manual Process Used (by day of week)</MudText>
+﻿@using LetterTracker.Models.PaManualMailTracking
+
+<MudText Typo="Typo.subtitle1">Manual Process Used (by day of week)</MudText>
 <MudRadioGroup T="ManualProcessDayEnum"
                Name="processDay"
                SelectedOption="SearchModel.ManualProcessDay"
@@ -115,7 +117,7 @@
 
 @code {
     [Parameter]
-    public PaManualMailTrackingSearchModel SearchModel { get; set; } = null!;
+    public PaManualMailTrackingSearchModel SearchModel { get; set; } = new ();
 
     private void HandleProccessDayChanged(ManualProcessDayEnum day)
     {

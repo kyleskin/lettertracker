@@ -2,26 +2,26 @@
 using System.ComponentModel.DataAnnotations;
 using LetterTracker.CustomValidation;
 
-namespace LetterTracker.Models
+namespace LetterTracker.Models.PaManualMailTracking
 {
     public class PaManualMailTrackingSearchModel
     {
-        //[Required]
-        //[StringLength(10, MinimumLength=10, ErrorMessage = "{0} must be {1} characters long.")]
+        [Required]
+        [StringLength(10, MinimumLength=10, ErrorMessage = "{0} must be {1} characters long.")]
         public string? EocId { get; set; }
-        //[Required]
+        [Required]
         public string? MemberId { get; set; }
-        //[Required]
+        [Required]
         public string? AgentUserId { get; set; }
-        //[Required]
+        [Required]
         public ManualLetterReasonEnum ReasonForManualLetter { get; set; }
-        //[Required]
+        [Required]
         public DateTime? ManualMailDate { get; set; }
-        //[Required]
+        [Required]
         public TimeSpan? ManualMailTime { get; set; }
-        //[Required]
+        [Required]
         public TimeZoneEnum TimeZone { get; set; }
-        //[Required]
+        [Required]
         public LetterTypeEnum LetterType { get; set; }
         public string? Comments { get; set; }
         [Required]

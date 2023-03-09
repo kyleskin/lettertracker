@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -25,9 +25,11 @@
   <ItemGroup>
     <None Remove="bunit" />
     <None Remove="ManualProcessValidationTests\" />
+    <None Remove="ManualProcessComponentTests\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ManualProcessValidationTests\" />
+    <Folder Include="ManualProcessComponentTests\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LetterTracker\LetterTracker.csproj" />

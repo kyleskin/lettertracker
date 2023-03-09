@@ -12,12 +12,14 @@
     <None Remove="MudBlazor" />
     <None Remove="Components\" />
     <None Remove="Components\PaHubManualMailTrackingComponents\" />
+    <None Remove="Models\RxLetterTracking\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="CustomValidation\" />
     <Folder Include="Components\" />
     <Folder Include="Components\PaHubManualMailTrackingComponents\" />
+    <Folder Include="Models\RxLetterTracking\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MudBlazor" Version="6.1.8" />

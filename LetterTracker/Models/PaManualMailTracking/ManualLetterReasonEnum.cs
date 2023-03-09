@@ -1,5 +1,5 @@
 ﻿using System;
-namespace LetterTracker.Models
+namespace LetterTracker.Models.PaManualMailTracking
 {
     public enum ManualLetterReasonEnum
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using LetterTracker.Models;
+using LetterTracker.Models.PaManualMailTracking;
 
 namespace LetterTracker.CustomValidation
 {
@@ -10,9 +10,6 @@ namespace LetterTracker.CustomValidation
         private readonly ManualProcessEnum SaturdayAllowedProcesses = ManualProcessEnum.SecurityDesk | ManualProcessEnum.PostOfficeUspsCollectionBox;
         private readonly ManualProcessEnum SundayAllowedProcesses = ManualProcessEnum.PostOfficeUspsCollectionBox;
         private readonly ManualProcessEnum HolidayAllowedProcesses = ManualProcessEnum.PostOfficeUspsCollectionBox;
-
-
-        public ManualProcessAttribute() : base("{0} is required.") { }
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {

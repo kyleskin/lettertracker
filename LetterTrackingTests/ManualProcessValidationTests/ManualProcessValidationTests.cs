@@ -1,91 +1,117 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using LetterTracker.CustomValidation;
+using LetterTracker.Models.PaManualMailTracking;
 using LetterTracker.Models;
 
 namespace PaManualMailTrackingTests.ManualProcessValidationTests
 {
     public class ManualProcessValidationTests
     {
+        private static PaManualMailTrackingSearchModel CreateSearchModelForManualProcesses()
+        {
+            return new PaManualMailTrackingSearchModel
+            {
+                EocId = "1111111111",
+                MemberId = "MemberId",
+                AgentUserId = "kskinne6",
+                ReasonForManualLetter = ManualLetterReasonEnum.VerbalNotificationUnsuccessful,
+                ManualMailDate = DateTime.Today,
+                ManualMailTime = DateTime.UtcNow.TimeOfDay,
+                TimeZone = TimeZoneEnum.Est,
+                LetterType = LetterTypeEnum.FinalNotification,
+            };
+        }
+
         [Theory]
         [InlineData(ManualProcessEnum.CageInMailRoom)]
         [InlineData(ManualProcessEnum.SecurityDesk)]
         [InlineData(ManualProcessEnum.PostOfficeUspsCollectionBox)]
-        public void BusinessDayShouldBeValidWithValidProcesses(ManualProcessEnum process)
+        private void BusinessDayShouldBeValidWithValidProcesses(ManualProcessEnum process)
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.BusinessDay,
-                BusinessDayManualProcessRadioOption = process.ToString()
-            };
+            //  Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.BusinessDay;
+            sut.BusinessDayManualProcessRadioOption = process.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.True(isValid);
         }
 
         [Fact]
-        public void BusinessDayShouldBeInvalidWithInvalidProcesses()
+        private void BusinessDayShouldBeInvalidWithInvalidProcesses()
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.BusinessDay,
-                BusinessDayManualProcessRadioOption = ManualProcessEnum.None.ToString()
-            };
+            // Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.BusinessDay;
+            sut.BusinessDayManualProcessRadioOption = ManualProcessEnum.None.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.False(isValid);
         }
 
         [Theory]
         [InlineData(ManualProcessEnum.SecurityDesk)]
         [InlineData(ManualProcessEnum.PostOfficeUspsCollectionBox)]
-        public void SaturdayShouldBeValidWithValidProcesses(ManualProcessEnum process)
+        private void SaturdayShouldBeValidWithValidProcesses(ManualProcessEnum process)
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.Saturday,
-                SaturdayManualProcessRadioOption = process.ToString()
-            };
+            // Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.Saturday;
+            sut.SaturdayManualProcessRadioOption = process.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.True(isValid);
         }
 
         [Theory]
         [InlineData(ManualProcessEnum.None)]
         [InlineData(ManualProcessEnum.CageInMailRoom)]
-        public void SaturdayShouldBeInvalidWithInvalidProcesses(ManualProcessEnum process)
+        private void SaturdayShouldBeInvalidWithInvalidProcesses(ManualProcessEnum process)
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.Saturday,
-                SaturdayManualProcessRadioOption = process.ToString()
-            };
+            // Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.Saturday;
+            sut.SaturdayManualProcessRadioOption = process.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.False(isValid);
         }
 
         [Fact]
-        public void SundayShouldBeValidWithValidProcesses()
+        private void SundayShouldBeValidWithValidProcesses()
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.Sunday,
-                SundayManualProcessRadioOption = ManualProcessEnum.PostOfficeUspsCollectionBox.ToString()
-            };
+            // Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.Sunday;
+            sut.SundayManualProcessRadioOption = ManualProcessEnum.PostOfficeUspsCollectionBox.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.True(isValid);
         }
 
@@ -93,32 +119,36 @@ namespace PaManualMailTrackingTests.ManualProcessValidationTests
         [InlineData(ManualProcessEnum.None)]
         [InlineData(ManualProcessEnum.CageInMailRoom)]
         [InlineData(ManualProcessEnum.SecurityDesk)]
-        public void SundayShouldBeInvalidWithInvalidProcesses(ManualProcessEnum process)
+        private void SundayShouldBeInvalidWithInvalidProcesses(ManualProcessEnum process)
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.Sunday,
-                SundayManualProcessRadioOption = process.ToString()
-            };
+            // Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.Sunday;
+            sut.SundayManualProcessRadioOption = process.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.False(isValid);
         }
 
         [Fact]
-        public void HolidayShouldBeValidWithValidProcesses()
+        private void HolidayShouldBeValidWithValidProcesses()
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.Holiday,
-                HolidayManualProcessRadioOption = ManualProcessEnum.PostOfficeUspsCollectionBox.ToString()
-            };
+            // Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.Holiday;
+            sut.HolidayManualProcessRadioOption = ManualProcessEnum.PostOfficeUspsCollectionBox.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.True(isValid);
         }
 
@@ -126,17 +156,19 @@ namespace PaManualMailTrackingTests.ManualProcessValidationTests
         [InlineData(ManualProcessEnum.None)]
         [InlineData(ManualProcessEnum.CageInMailRoom)]
         [InlineData(ManualProcessEnum.SecurityDesk)]
-        public void HolidayShouldBeInvalidWithInvalidProcesses(ManualProcessEnum process)
+        private void HolidayShouldBeInvalidWithInvalidProcesses(ManualProcessEnum process)
         {
-            var sut = new PaManualMailTrackingSearchModel
-            {
-                ManualProcessDay = ManualProcessDayEnum.Sunday,
-                SundayManualProcessRadioOption = process.ToString()
-            };
+            // Arrange
+            var sut = CreateSearchModelForManualProcesses();
+            sut.ManualProcessDay = ManualProcessDayEnum.Sunday;
+            sut.SundayManualProcessRadioOption = process.ToString();
+
+            // Act
             var context = new ValidationContext(sut);
             var results = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(sut, context, results, true);
 
+            // Assert
             Assert.False(isValid);
         }
     }

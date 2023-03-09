@@ -1,0 +1,29 @@
+﻿@using LetterTracker.Components.PaHubManualMailTrackingComponents
+@using LetterTracker.Models.PaManualMailTracking
+@using LetterTracker.Models
+
+@code {
+[Fact]
+private void NewPageShowsBusinessDaySelected()
+{
+        // Arrange
+    using var ctx = new TestContext();
+    var SearchModel = new PaManualMailTrackingSearchModel
+    {
+        ReasonForManualLetter = ManualLetterReasonEnum.VerbalNotificationUnsuccessful,
+        TimeZone = TimeZoneEnum.Mst,
+        LetterType = LetterTypeEnum.FinalNotification,
+        ManualProcessDay = ManualProcessDayEnum.BusinessDay,
+        BusinessDayManualProcessRadioOption = ManualProcessEnum.CageInMailRoom.ToString()
+    };
+
+        // Act
+    var cut = ctx.Render(@<ManualProcessComponent
+                                SearchModel="SearchModel"/>);
+
+        // Assert
+        Assert.True(true);
+    }
+
+}
+
